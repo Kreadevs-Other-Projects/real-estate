@@ -13,7 +13,6 @@ export default function Header() {
   return (
     <nav className="sticky top-0 z-50 bg-white shadow-md border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        {/* Logo */}
         <Link
           to="/"
           className="text-2xl font-bold text-indigo-600 hover:text-indigo-800 transition"
@@ -21,7 +20,6 @@ export default function Header() {
           <img src={logo} alt="" width={100} height={100}/>
         </Link>
 
-        {/* Nav Links */}
         <div className="flex items-center gap-8 text-gray-700 font-medium">
           <Link
             to="/"

@@ -40,7 +40,6 @@ export default function PropertyForm() {
           "url('https://images.unsplash.com/photo-1572120360610-d971b9d7767c?auto=format&fit=crop&w=1600&q=80')",
       }}
     >
-      {/* Overlay for blending */}
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
 
       <div className="w-full max-w-2xl bg-white/95 rounded-2xl shadow-xl p-8 relative z-10">
@@ -48,7 +47,6 @@ export default function PropertyForm() {
           Add Your Property
         </h2>
         <form onSubmit={submit} className="space-y-5">
-          {/* Title */}
           <div>
             <label className="block text-gray-700 font-medium mb-1">
               Title
@@ -62,7 +60,6 @@ export default function PropertyForm() {
             />
           </div>
 
-          {/* Location */}
           <div>
             <label className="block text-gray-700 font-medium mb-1">
               Location
@@ -76,7 +73,6 @@ export default function PropertyForm() {
             />
           </div>
 
-          {/* Price */}
           <div>
             <label className="block text-gray-700 font-medium mb-1">
               Price
@@ -91,7 +87,6 @@ export default function PropertyForm() {
             />
           </div>
 
-          {/* Category */}
           <div>
             <label className="block text-gray-700 font-medium mb-1">
               Category
@@ -110,7 +105,6 @@ export default function PropertyForm() {
             </select>
           </div>
 
-          {/* Description */}
           <div>
             <label className="block text-gray-700 font-medium mb-1">
               Description
@@ -124,7 +118,6 @@ export default function PropertyForm() {
             />
           </div>
 
-          {/* Images */}
           <div>
             <label className="block text-gray-700 font-medium mb-1">
               Image URLs
@@ -143,7 +136,6 @@ export default function PropertyForm() {
             </p>
           </div>
 
-          {/* Submit */}
           <button
             type="submit"
             className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl shadow-lg transition duration-300"

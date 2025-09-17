@@ -22,24 +22,19 @@ export default function Login() {
 
       const { token, user, message } = res.data;
 
-      // Save in local storage
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
 
-      // ✅ Success toast
       toast.success(message || (isRegister ? "Registered Successfully!" : "Login Successful!"), {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 2000,
       });
 
-      // Navigate after a short delay so toast is visible
       setTimeout(() => {
         navigate("/");
       }, 2000);
     } catch (err) {
-      // ❌ Error toast
       toast.error(err.response?.data?.message || "Invalid credentials!", {
-        // position: toast.POSITION.TOP_RIGHT,
         autoClose: 3000,
       });
     }
@@ -47,7 +42,6 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-gray-100 via-gray-200 to-gray-100 relative">
-      {/* Background Image Overlay */}
       <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1505691938895-1758d7feb511')] bg-cover bg-center opacity-30"></div>
 
       <div className="relative z-10 w-full max-w-md p-8 bg-white/90 backdrop-blur-md shadow-2xl rounded-2xl">
@@ -105,7 +99,6 @@ export default function Login() {
         </div>
       </div>
 
-      {/* ✅ Toast Container */}
       <ToastContainer />
     </div>
   );

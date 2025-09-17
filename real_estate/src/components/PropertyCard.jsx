@@ -4,10 +4,8 @@ import { Link } from "react-router-dom";
 export default function PropertyCard({ property }) {
   return (
     <div className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition duration-300">
-      {/* Image */}
       <div className="relative">
         <img
-          // src={property.images?.[0] || "https://images.unsplash.com/photo-1568605114967-8130f3a36994" }
           src={Array.isArray(property.images)
             ? property.images[0]
             : property.images
@@ -16,13 +14,11 @@ export default function PropertyCard({ property }) {
           alt={property.title}
           className="w-full h-56 object-cover"
         />
-        {/* Price Tag */}
         <div className="absolute bottom-3 left-3 bg-black/70 text-white text-sm px-3 py-1 rounded-lg">
           PKR {property.price}
         </div>
       </div>
 
-      {/* Content */}
       <div className="p-5">
         <h3 className="text-xl font-semibold text-gray-800 truncate">
           {property.title}
@@ -32,7 +28,6 @@ export default function PropertyCard({ property }) {
           <span className="font-medium">{property.category}</span>
         </p>
 
-        {/* Button */}
         <div className="mt-4 flex justify-end">
           <Link
             to={`/property/${property._id}`}
