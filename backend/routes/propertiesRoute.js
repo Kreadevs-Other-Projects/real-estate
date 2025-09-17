@@ -1,12 +1,21 @@
 const express = require("express");
 const router = express.Router();
-const auth = require("../middleware/auth");
-const propCtrl = require("../controllers/propertyController");
+const upload = require("../middlewares/upload");
+const {
+  createProperty,
+  updateProperty,
+  deleteProperty,
+  getProperty,
+  listProperties,
+} = require("../controllers/propertyController");
+const auth = require("../middlewares/auth");
 
-router.get("/", propCtrl.listProperties);
-router.get("/:id", propCtrl.getProperty);
-router.post("/", auth, propCtrl.createProperty);
-router.put("/:id", auth, propCtrl.updateProperty);
-router.delete("/:id", auth, propCtrl.deleteProperty);
+router.post("/", auth, upload.array("images", 5), createProperty);
+
+router.put("/:id", auth, upload.array("images", 5), updateProperty);
+
+router.delete("/:id", auth, deleteProperty);
+router.get("/:id", getProperty);
+router.get("/", listProperties);
 
 module.exports = router;
