@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import API from "../api/api";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Pagination, Navigation, Thumbs } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import "swiper/css/thumbs";
 
 export default function PropertyDetails() {
   const { id } = useParams();
   const [prop, setProp] = useState(null);
+  const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -24,43 +31,70 @@ export default function PropertyDetails() {
   return (
     <div className="min-h-screen bg-gray-100 py-10">
       <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden">
-        <div className="relative">
-          <img
-            src={
-              prop.images?.[0] ||
-              "https://via.placeholder.com/1200x400?text=Property+Image"
-            }
-            alt={prop.title}
-            className="w-full h-96 object-cover"
-          />
-          <div className="absolute bottom-5 left-5 bg-black/60 text-white px-4 py-2 rounded-xl">
-            <span className="text-2xl font-bold">PKR {prop.price}</span>
-          </div>
-        </div>
-
         <div className="p-8">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-800 mb-2">
-                {prop.title}
-              </h1>
-              <p className="text-gray-600">
-                {prop.location} ·{" "}
-                <span className="font-semibold">{prop.category}</span>
-              </p>
-            </div>
+          {/* ---------- Main Slider ---------- */}
+          <Swiper
+            modules={[Autoplay, Pagination, Navigation, Thumbs]}
+            spaceBetween={10}
+            navigation
+            pagination={{ clickable: true }}
+            autoplay={{ delay: 3000, disableOnInteraction: false }}
+            thumbs={{ swiper: thumbsSwiper }}
+            className="w-full h-[450px] rounded-xl"
+          >
+            {prop.images?.length > 0 ? (
+              prop.images.map((src, idx) => (
+                <SwiperSlide key={idx}>
+                  <img
+                    src={src || "https://via.placeholder.com/1200x400"}
+                    alt={`property-${idx}`}
+                    className="h-full w-full object-cover rounded-xl"
+                  />
+                </SwiperSlide>
+              ))
+            ) : (
+              <SwiperSlide>
+                <img
+                  src="https://via.placeholder.com/1200x400?text=No+Image"
+                  alt="no-img"
+                  className="h-full w-full object-cover rounded-xl"
+                />
+              </SwiperSlide>
+            )}
+          </Swiper>
+
+          {/* ---------- Thumbnail Slider ---------- */}
+          <Swiper
+            onSwiper={setThumbsSwiper}
+            modules={[Thumbs]}
+            spaceBetween={10}
+            slidesPerView={5}
+            watchSlidesProgress
+            className="mt-4"
+          >
+            {prop.images?.map((src, idx) => (
+              <SwiperSlide key={idx}>
+                <img
+                  src={src || "https://via.placeholder.com/200"}
+                  alt={`thumb-${idx}`}
+                  className="h-24 w-full object-cover rounded-xl cursor-pointer border-2 border-transparent transition-all duration-300 hover:border-blue-400"
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+
+          {/* ---------- Price and Details ---------- */}
+          <div className="mt-6 flex justify-between items-center">
+            <h1 className="text-3xl font-bold text-gray-800">{prop.title}</h1>
+            <span className="text-2xl font-semibold text-indigo-600">
+              PKR {prop.price}
+            </span>
           </div>
 
-          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {prop.images?.map((src, idx) => (
-              <img
-                key={idx}
-                src={src || "https://via.placeholder.com/200"}
-                alt={`property-${idx}`}
-                className="w-full h-56 object-cover rounded-xl shadow-sm hover:scale-105 transition duration-300"
-              />
-            ))}
-          </div>
+          <p className="text-gray-600 mt-2">
+            {prop.location} ·{" "}
+            <span className="font-semibold">{prop.category}</span>
+          </p>
 
           <div className="mt-8">
             <h2 className="text-xl font-semibold text-gray-800 mb-3">

@@ -16,16 +16,31 @@ export default function PropertyForm() {
   const onChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
+  const handleFileChange = (e) => {
+    setForm({ ...form, images: Array.from(e.target.files) });
+  }
+
   const submit = async (e) => {
     e.preventDefault();
     try {
-      const payload = {
-        ...form,
-        images: form.images.length
-          ? form.images.split(",").map((s) => s.trim())
-          : [],
-      };
-      await API.post("/properties", payload);
+      const formData = new FormData();
+      formData.append("title", form.title);
+      formData.append("description", form.description);
+      formData.append("price", form.price);
+      formData.append("location", form.location);
+      formData.append("category", form.category);
+
+      // Append all selected files
+      for (let i = 0; i < form.images.length; i++) {
+        formData.append("images", form.images[i]);
+      }
+
+      await API.post("/properties", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
       navigate("/");
     } catch (err) {
       alert(err.response?.data?.message || "Error creating property");
@@ -123,16 +138,16 @@ export default function PropertyForm() {
               Image URLs
             </label>
             <input
-              name="images"
-              placeholder="Enter multiple URLs separated by commas"
-              value={form.images}
+              type="file"
+              multiple
+              accept="image/*"
               onChange={(e) =>
-                setForm({ ...form, images: e.target.value })
+                setForm({ ...form, images: e.target.files })
               }
               className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none"
             />
             <p className="text-sm text-gray-500 mt-1">
-              Example: https://example.com/img1.jpg, https://example.com/img2.jpg
+              Format: jpg, png
             </p>
           </div>
 
