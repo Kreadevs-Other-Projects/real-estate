@@ -4,7 +4,13 @@ exports.createProperty = async (req, res) => {
   try {
     const data = req.body;
     data.owner = req.user._id;
-    const prop = new Property(data);
+ if (typeof data.images === "string") {
+      data.images = data.images.split(",").map(img => img.trim());
+    } else if (Array.isArray(data.images)) {
+      data.images = data.images.map(img => img.trim());
+    } else {
+      data.images = []; // default empty
+    }    const prop = new Property(data);
     await prop.save();
     res.status(201).json(prop);
   } catch (err) {
@@ -17,7 +23,11 @@ exports.updateProperty = async (req, res) => {
   try {
     const prop = await Property.findById(req.params.id);
     if (!prop) return res.status(404).json({ message: "Property not found" });
-
+if (typeof req.body.images === "string") {
+      req.body.images = req.body.images.split(",").map(img => img.trim());
+    } else if (Array.isArray(req.body.images)) {
+      req.body.images = req.body.images.map(img => img.trim());
+    }
     Object.assign(prop, req.body);
     await prop.save();
     res.json(prop);
