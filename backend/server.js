@@ -4,11 +4,23 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 const path = require("path");
 
+const PORT = process.env.PORT || 5000;
+
 const app = express();
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 app.use(express.json({ limit: "20mb" }));
 
-const PORT = process.env.PORT || 5000;
+app.use((req, res, next) => {
+  console.log(req.path, req.method);
+  next();
+});
 
 connectDB(process.env.MONGO_URI);
 

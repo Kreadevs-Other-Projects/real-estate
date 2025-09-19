@@ -13,10 +13,10 @@ exports.createProperty = async (req, res) => {
 
     const prop = new Property(data);
     await prop.save();
-    res.status(201).json(prop);
+    return res.status(201).json(prop);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Server error" });
+    return res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -32,10 +32,10 @@ exports.updateProperty = async (req, res) => {
 
     Object.assign(prop, req.body);
     await prop.save();
-    res.json(prop);
+    return res.json(prop);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Server error" });
+    return res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -43,10 +43,10 @@ exports.deleteProperty = async (req, res) => {
   try {
     const prop = await Property.findByIdAndDelete(req.params.id);
     if (!prop) return res.status(404).json({ message: "Property not found" });
-    res.json({ message: "Property deleted" });
+    return res.json({ message: "Property deleted" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Server error" });
+    return res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -57,10 +57,10 @@ exports.getProperty = async (req, res) => {
       "name email"
     );
     if (!prop) return res.status(404).json({ message: "Property not found" });
-    res.json(prop);
+    return res.json(prop);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Server error" });
+    return res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -83,9 +83,9 @@ exports.listProperties = async (req, res) => {
     const props = await Property.find(filter)
       .sort({ createdAt: -1 })
       .limit(100);
-    res.json(props);
+    return res.json(props);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Server error" });
+    return res.status(500).json({ message: "Server error" });
   }
 };
