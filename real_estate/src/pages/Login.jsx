@@ -8,6 +8,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const [role, setRole] = useState("admin");
   const [isRegister, setIsRegister] = useState(false);
   const navigate = useNavigate();
 
@@ -25,10 +26,14 @@ export default function Login() {
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
 
-      toast.success(message || (isRegister ? "Registered Successfully!" : "Login Successful!"), {
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 2000,
-      });
+      toast.success(
+        message ||
+          (isRegister ? "Registered Successfully!" : "Login Successful!"),
+        {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 2000,
+        }
+      );
 
       setTimeout(() => {
         navigate("/");
@@ -78,6 +83,15 @@ export default function Login() {
             onChange={(e) => setPassword(e.target.value)}
             className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none"
           />
+          {isRegister && (
+            <input
+              type="role"
+              placeholder="Role"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+            />
+          )}
 
           <button
             type="submit"

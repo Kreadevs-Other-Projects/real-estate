@@ -2,9 +2,11 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/db");
-const path = require("path");
 
-const PORT = process.env.PORT || 5000;
+const authRoute = require("./routes/authRoute");
+const propertiesRoute = require("./routes/propertiesRoute");
+
+const PORT = process.env.PORT;
 
 const app = express();
 app.use(
@@ -24,10 +26,8 @@ app.use((req, res, next) => {
 
 connectDB(process.env.MONGO_URI);
 
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
-app.use("/api/auth", require("./routes/authRoute"));
-app.use("/api/properties", require("./routes/propertiesRoute"));
+app.use("/api/auth", authRoute);
+app.use("/api/properties", propertiesRoute);
 
 app.get("/", (req, res) => res.send("Real Estate API is running"));
 

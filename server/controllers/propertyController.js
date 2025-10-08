@@ -1,6 +1,6 @@
 const Property = require("../models/Property");
 
-exports.createProperty = async (req, res) => {
+const createProperty = async (req, res) => {
   try {
     const data = req.body;
     data.owner = req.user._id;
@@ -13,17 +13,29 @@ exports.createProperty = async (req, res) => {
 
     const prop = new Property(data);
     await prop.save();
-    return res.status(201).json(prop);
+    return res.status(201).json({
+      success: true,
+      message: "Property created successfully",
+      property: prop,
+    });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ message: "Server error" });
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: err.message,
+    });
   }
 };
 
-exports.updateProperty = async (req, res) => {
+const updateProperty = async (req, res) => {
   try {
     const prop = await Property.findById(req.params.id);
-    if (!prop) return res.status(404).json({ message: "Property not found" });
+    if (!prop)
+      return res.status(404).json({
+        success: false,
+        message: "Property not found",
+      });
 
     if (req.files) {
       const newImages = req.files.map((file) => `/uploads/${file.filename}`);
@@ -32,39 +44,71 @@ exports.updateProperty = async (req, res) => {
 
     Object.assign(prop, req.body);
     await prop.save();
-    return res.json(prop);
+    return res.json({
+      success: true,
+      message: "Property updated successfully",
+      property: prop,
+    });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ message: "Server error" });
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: err.message,
+    });
   }
 };
 
-exports.deleteProperty = async (req, res) => {
+const deleteProperty = async (req, res) => {
   try {
     const prop = await Property.findByIdAndDelete(req.params.id);
-    if (!prop) return res.status(404).json({ message: "Property not found" });
-    return res.json({ message: "Property deleted" });
+    if (!prop)
+      return res.status(404).json({
+        success: false,
+        message: "Property not found",
+      });
+
+    return res.json({
+      success: true,
+      message: "Property deleted successfully",
+    });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ message: "Server error" });
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: err.message,
+    });
   }
 };
 
-exports.getProperty = async (req, res) => {
+const getProperty = async (req, res) => {
   try {
     const prop = await Property.findById(req.params.id).populate(
       "owner",
       "name email"
     );
-    if (!prop) return res.status(404).json({ message: "Property not found" });
-    return res.json(prop);
+    if (!prop)
+      return res.status(404).json({
+        success: false,
+        message: "Property not found",
+      });
+
+    return res.json({
+      success: true,
+      property: prop,
+    });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ message: "Server error" });
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: err.message,
+    });
   }
 };
 
-exports.listProperties = async (req, res) => {
+const listProperties = async (req, res) => {
   try {
     const { q, category, minPrice, maxPrice } = req.query;
     const filter = {};
@@ -83,9 +127,26 @@ exports.listProperties = async (req, res) => {
     const props = await Property.find(filter)
       .sort({ createdAt: -1 })
       .limit(100);
-    return res.json(props);
+
+    return res.json({
+      success: true,
+      count: props.length,
+      properties: props,
+    });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ message: "Server error" });
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: err.message,
+    });
   }
+};
+
+module.exports = {
+  createProperty,
+  updateProperty,
+  deleteProperty,
+  getProperty,
+  listProperties,
 };
